@@ -12,7 +12,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-
+/**
+ * Swagger 配置类
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -32,10 +34,10 @@ public class SwaggerConfig {
 
     public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("KaizenScholl在线学习平台")
-                .description("KaizenScholl在线学习平台接口")
-                .termsOfServiceUrl("kaizen")
-                .contact(new Contact("weizujie", "http://weizujie.vip", "byojiaoxianz7@outlook.com"))
+                .title("在线学习平台")
+                .description("在线学习平台接口")
+                .termsOfServiceUrl("weizujie")
+                .contact(new Contact("weizujie", "https://github.com/weizujie", "byojiaoxianz7@outlook.com"))
                 .version("1.0")
                 .build();
     }

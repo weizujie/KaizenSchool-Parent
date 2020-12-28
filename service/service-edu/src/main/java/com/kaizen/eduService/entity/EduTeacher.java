@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="EduTeacher对象", description="讲师")
+@ApiModel(value = "EduTeacher对象", description = "讲师")
 public class EduTeacher implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,7 +59,7 @@ public class EduTeacher implements Serializable {
     private Date gmtCreate;
 
     @ApiModelProperty(value = "更新时间")
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmtModified;
 
 

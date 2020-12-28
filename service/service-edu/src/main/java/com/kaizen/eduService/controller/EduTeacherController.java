@@ -4,13 +4,12 @@ package com.kaizen.eduService.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kaizen.eduService.entity.EduTeacher;
-import com.kaizen.eduService.entity.vo.TeacherQuery;
+import com.kaizen.eduService.model.query.TeacherQuery;
 import com.kaizen.eduService.service.EduTeacherService;
 import com.kaizen.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +28,18 @@ import java.util.Map;
 @Api(tags = "讲师管理")
 @RestController
 @RequestMapping("/eduService/teacher")
+// 解决跨域问题
+@CrossOrigin
 public class EduTeacherController {
 
-    @Autowired
-    private EduTeacherService eduTeacherService;
+    /**
+     * 注入 eduTeacherService，不用 @Autowired
+     */
+    private final EduTeacherService eduTeacherService;
+
+    public EduTeacherController(EduTeacherService eduTeacherService) {
+        this.eduTeacherService = eduTeacherService;
+    }
 
     /**
      * 1. 查询所有讲师数据
@@ -131,6 +138,9 @@ public class EduTeacherController {
             // le 小于等于
             wrapper.le("gmt_create", end);
         }
+        // 根据创建时间进行降序排列（新增的数据在第一个）
+        wrapper.orderByDesc("gmt_create");
+
         eduTeacherService.page(pageTeacher, wrapper);
         // 构建返回结果
         long total = pageTeacher.getTotal();
@@ -174,14 +184,14 @@ public class EduTeacherController {
 
     /**
      * 7. 修改讲师
-     * 注意：@RequestBody 注解要跟 POST 一起使用，这里用 PUT 的话就不用加 @RequestBody 了
+     * RequestBody 注解详解请看：https://blog.csdn.net/jiashanshan521/article/details/88244735
      *
      * @param eduTeacher EduTeacher
      * @return R
      */
     @ApiOperation("修改讲师")
-    @PutMapping("/updateTeacher")
-    public R updateTeacher(EduTeacher eduTeacher) {
+    @PutMapping(value = "/editTeacher")
+    public R updateTeacher(@RequestBody EduTeacher eduTeacher) {
         boolean flag = eduTeacherService.updateById(eduTeacher);
         if (flag) {
             return R.success();
