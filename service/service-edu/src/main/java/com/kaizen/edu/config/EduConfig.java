@@ -1,4 +1,4 @@
-package com.kaizen.eduService.config;
+package com.kaizen.edu.config;
 
 
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
@@ -8,13 +8,11 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@MapperScan("com.kaizen.eduService.mapper")
+@MapperScan("com.kaizen.edu.mapper")
 @Configuration
 public class EduConfig {
     /**
      * 逻辑删除插件
-     *
-     * @return ISqlInjector
      */
     @Bean
     public ISqlInjector sqlInjector() {

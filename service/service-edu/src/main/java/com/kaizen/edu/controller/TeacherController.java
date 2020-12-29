@@ -1,15 +1,16 @@
-package com.kaizen.eduService.controller;
+package com.kaizen.edu.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.kaizen.eduService.entity.EduTeacher;
-import com.kaizen.eduService.model.query.TeacherQuery;
-import com.kaizen.eduService.service.EduTeacherService;
+import com.kaizen.edu.entity.Teacher;
+import com.kaizen.edu.model.query.TeacherQuery;
+import com.kaizen.edu.service.ITeacherService;
 import com.kaizen.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,19 +27,19 @@ import java.util.Map;
  * @since 2020-12-25
  */
 @Api(tags = "讲师管理")
+@Slf4j
 @RestController
-@RequestMapping("/eduService/teacher")
-// 解决跨域问题
-@CrossOrigin
-public class EduTeacherController {
+@RequestMapping("/edu/teacher")
+@CrossOrigin // 解决跨域问题
+public class TeacherController {
 
     /**
-     * 注入 eduTeacherService，不用 @Autowired
+     * 注入 teacherService，不用 @Autowired
      */
-    private final EduTeacherService eduTeacherService;
+    private final ITeacherService teacherService;
 
-    public EduTeacherController(EduTeacherService eduTeacherService) {
-        this.eduTeacherService = eduTeacherService;
+    public TeacherController(ITeacherService teacherService) {
+        this.teacherService = teacherService;
     }
 
     /**
@@ -49,7 +50,7 @@ public class EduTeacherController {
     @ApiOperation("讲师列表")
     @GetMapping("/findAll")
     public R findAllTeacher() {
-        List<EduTeacher> teachers = eduTeacherService.list(null);
+        List<Teacher> teachers = teacherService.list(null);
         return R.success().data("items", teachers);
     }
 
@@ -63,7 +64,7 @@ public class EduTeacherController {
     @ApiOperation("逻辑删除讲师")
     @DeleteMapping("/deleteTeacher/{id}")
     public R deleteTeacherById(@ApiParam(name = "id", value = "讲师ID", required = true) @PathVariable String id) {
-        boolean flag = eduTeacherService.removeById(id);
+        boolean flag = teacherService.removeById(id);
         if (flag) {
             return R.success();
         } else {
@@ -83,11 +84,11 @@ public class EduTeacherController {
     public R pageListTeacher(@ApiParam(name = "current", value = "当前页") @PathVariable Long current,
                              @ApiParam(name = "limit", value = "每页显示的条数") @PathVariable Long limit) {
         // 创建 page 对象
-        Page<EduTeacher> pageTeacher = new Page<>(current, limit);
+        Page<Teacher> pageTeacher = new Page<>(current, limit);
         // 调用方法的时候，把分页所有数据封装到 pageTeacher 对象里面
-        eduTeacherService.page(pageTeacher, null);
+        teacherService.page(pageTeacher, null);
         long total = pageTeacher.getTotal(); // 总记录数
-        List<EduTeacher> records = pageTeacher.getRecords(); // 数据 list 集合
+        List<Teacher> records = pageTeacher.getRecords(); // 数据 list 集合
         Map<String, Object> map = new HashMap<>();
         // 封装返回结果
         map.put("total", total);
@@ -111,10 +112,10 @@ public class EduTeacherController {
                                   @ApiParam(name = "limit", value = "每页显示的条数") @PathVariable Long limit,
                                   @RequestBody(required = false) TeacherQuery teacherQuery) { // 加 @RequestBody 注解是常见写法，不要也行
         // 创建 page 对象
-        Page<EduTeacher> pageTeacher = new Page<>(current, limit);
+        Page<Teacher> pageTeacher = new Page<>(current, limit);
         // 构建条件
         // wrapper是啥？
-        QueryWrapper<EduTeacher> wrapper = new QueryWrapper<>();
+        QueryWrapper<Teacher> wrapper = new QueryWrapper<>();
         // 多条件组合查询
         String name = teacherQuery.getName();
         Integer level = teacherQuery.getLevel();
@@ -141,10 +142,10 @@ public class EduTeacherController {
         // 根据创建时间进行降序排列（新增的数据在第一个）
         wrapper.orderByDesc("gmt_create");
 
-        eduTeacherService.page(pageTeacher, wrapper);
+        teacherService.page(pageTeacher, wrapper);
         // 构建返回结果
         long total = pageTeacher.getTotal();
-        List<EduTeacher> records = pageTeacher.getRecords();
+        List<Teacher> records = pageTeacher.getRecords();
         Map<String, Object> map = new HashMap<>();
         // 封装返回结果
         map.put("total", total);
@@ -155,13 +156,13 @@ public class EduTeacherController {
     /**
      * 5. 添加讲师
      *
-     * @param eduTeacher EduTeacher
+     * @param teacher EduTeacher
      * @return R
      */
     @ApiOperation("添加讲师")
     @PostMapping("/addTeacher")
-    public R addTeacher(@RequestBody EduTeacher eduTeacher) {
-        boolean save = eduTeacherService.save(eduTeacher);
+    public R addTeacher(@RequestBody Teacher teacher) {
+        boolean save = teacherService.save(teacher);
         if (save) {
             return R.success();
         } else {
@@ -177,22 +178,22 @@ public class EduTeacherController {
      */
     @ApiOperation("根据讲师id进行查询")
     @GetMapping("/getTeacher/{id}")
-    public R getTeacherById(@PathVariable String id) {
-        EduTeacher eduTeacher = eduTeacherService.getById(id);
-        return R.success().data("teacher", eduTeacher);
+    public R getTeacherById(@PathVariable("id") String id) {
+        Teacher teacher = teacherService.getById(id);
+        return R.success().data("teacher", teacher);
     }
 
     /**
      * 7. 修改讲师
      * RequestBody 注解详解请看：https://blog.csdn.net/jiashanshan521/article/details/88244735
      *
-     * @param eduTeacher EduTeacher
+     * @param teacher EduTeacher
      * @return R
      */
     @ApiOperation("修改讲师")
     @PutMapping(value = "/editTeacher")
-    public R updateTeacher(@RequestBody EduTeacher eduTeacher) {
-        boolean flag = eduTeacherService.updateById(eduTeacher);
+    public R updateTeacher(@RequestBody Teacher teacher) {
+        boolean flag = teacherService.updateById(teacher);
         if (flag) {
             return R.success();
         } else {

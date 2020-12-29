@@ -1,4 +1,4 @@
-package com.kaizen.eduService;
+package com.kaizen.edu;
 
 
 import org.springframework.boot.SpringApplication;
@@ -7,8 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.kaizen"})  // 设置包扫描规则
-public class Application {
+public class EduApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(EduApplication.class, args);
     }
 }

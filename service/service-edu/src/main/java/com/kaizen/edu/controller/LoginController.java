@@ -1,4 +1,4 @@
-package com.kaizen.eduService.controller;
+package com.kaizen.edu.controller;
 
 
 import com.kaizen.utils.R;
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 @Api("登录")
 @RestController
-@RequestMapping("/eduService/user")
+@RequestMapping("/edu/user")
 @CrossOrigin // 解决跨域问题
-public class EduLoginController {
+public class LoginController {
 
     /**
      * 用户登录

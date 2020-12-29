@@ -1,4 +1,4 @@
-package com.kaizen.eduService.model.query;
+package com.kaizen.edu.model.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
