@@ -2,13 +2,15 @@
 
 > Kaizen 意味着改进，涉及每一个人、每一环节的连续不断的改进。
 
+前端项目: https://github.com/weizujie/KaizenSchool-Front
+
 ## 使用方法
 
 1. 克隆项目到本地
   ```git
       git clone https://github.com/weizujie/KaizenSchool-Parent.git
   ```
-2. 配置数据库 ```ervice\service-edu\src\main\resources\application.yml```
+2. 配置数据库 ```service\service-edu\src\main\resources\application.yml```
   ```yaml
   spring: 
     datasource:
