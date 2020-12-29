@@ -8,7 +8,7 @@
   ```git
       git clone https://github.com/weizujie/KaizenSchool-Parent.git
   ```
-2. 配置数据库
+2. 配置数据库 ```ervice\service-edu\src\main\resources\application.yml```
   ```yaml
   spring: 
     datasource:
@@ -17,4 +17,26 @@
       username: 数据库账号
       password: 数据库密码
   ```
-3. 运行该项目
+3. 配置阿里云 OSS ```service\service-oss\src\main\resources\application.yml```
+  ```yml
+    server:
+  port: 8002
+
+  spring:
+    application:
+      name: service-oss
+
+    profiles:
+      active: dev
+
+  # 阿里云OSS
+  # 不同的服务器，地址不同
+  aliyun:
+    oss:
+      file:
+        endpoint: 
+        keyid: 
+        keysecret: 
+        # bucket可以在控制台创建，也可以使用 java 代码创建
+        bucketname: 
+  ```
